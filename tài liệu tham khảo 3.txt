@@ -1,0 +1,177 @@
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import javax.swing.JFrame;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+
+public class SensorDataDisplay extends JFrame {
+  
+  private static final long serialVersionUID = 1L;
+  private static final int WIDTH = 800;
+  private static final int HEIGHT = 600;
+  
+  private XYSeries temperatureSeries;
+  private XYSeries humiditySeries;
+  private DefaultCategoryDataset barDataset;
+  private DefaultPieDataset pieDataset;
+  
+  public SensorDataDisplay() {
+    super("Sensor Data Display");
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setSize(WIDTH, HEIGHT);
+    
+    // create line chart
+    temperatureSeries = new XYSeries("Temperature");
+    humiditySeries = new XYSeries("Humidity");
+    XYSeriesCollection lineDataset = new XYSeriesCollection();
+    lineDataset.addSeries(temperatureSeries);
+    lineDataset.addSeries(humiditySeries);
+    JFreeChart lineChart = ChartFactory.createXYLineChart(
+        "Temperature and Humidity", "Time", "Value", lineDataset,
+        PlotOrientation.VERTICAL, true, true, false);
+    XYPlot linePlot = (XYPlot) lineChart.getPlot();
+    linePlot.getRenderer().setSeriesPaint(0, Color.RED);
+    linePlot.getRenderer().setSeriesPaint(1, Color.BLUE);
+    ChartPanel lineChartPanel = new ChartPanel(lineChart);
+    
+    // create bar chart
+    barDataset = new DefaultCategoryDataset();
+    JFreeChart barChart = ChartFactory.createBarChart(
+        "Temperature and Humidity", "Type", "Value", barDataset,
+        PlotOrientation.VERTICAL, true, true, false);
+    ChartPanel barChartPanel = new ChartPanel(barChart);
+    
+    // create pie chart
+    pieDataset = new DefaultPieDataset();
+    JFreeChart pieChart = ChartFactory.createPieChart(
+        "Temperature and Humidity", pieDataset, true, true, false);
+    ChartPanel pieChartPanel = new ChartPanel(pieChart);
+    
+    // add chart panels to frame
+    getContentPane().add(lineChartPanel);
+    getContentPane().add(barChartPanel);
+    getContentPane().add(pieChartPanel);
+    
+    // display frame
+    pack();
+    setVisible(true);
+  }
+  
+  public void addSensorData(double temperature, double humidity) {
+    long currentTime = System.currentTimeMillis();
+    
+    // add data to line chart
+    temperatureSeries.add(currentTime, temperature);
+    humiditySeries.add(currentTime, humidity);
+    
+    // add data to bar chart
+    barDataset.setValue(temperature, "Temperature", "");
+    barDataset.setValue(humidity, "Humidity", "");
+    
+    // add data to pie chart
+    pieDataset.setValue("Temperature", temperature);
+    pieDataset.setValue("Humidity", humidity);
+  }
+  
+  public static void main(String[] args) throws InterruptedException {
+    SensorDataDisplay display = new SensorDataDisplay();
+    Random random = new Random();
+    while (true) {
+      double temperature = random.nextDouble() * 30
+
+
+
+Tiếp theo, chúng ta có thể sử dụng JFreeChart để tạo biểu đồ bar chart để hiển thị dữ liệu. Ví dụ dưới đây sẽ tạo một biểu đồ bar chart đơn giản cho dữ liệu đếm số lượng gói tin nhận được từ các cảm biến:
+
+import java.awt.Color;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.BorderFactory;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
+
+public class SensorDataBarChart {
+   private JFreeChart chart;
+   private DefaultCategoryDataset dataset;
+   
+   public SensorDataBarChart() {
+      dataset = new DefaultCategoryDataset();
+      chart = ChartFactory.createBarChart("Sensor Data Count", "Sensor ID", "Data Count", dataset, PlotOrientation.VERTICAL, false, true, false);
+      chart.setBackgroundPaint(new Color(240, 240, 240));
+   }
+   
+   public void updateChartData(Map<String, Integer> dataMap) {
+      dataset.clear();
+      for (Map.Entry<String, Integer> entry : dataMap.entrySet()) {
+         String sensorId = entry.getKey();
+         int dataCount = entry.getValue();
+         dataset.addValue(dataCount, sensorId, "");
+      }
+   }
+   
+   public void displayChart() {
+      JFrame frame = new JFrame("Sensor Data Bar Chart");
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      ChartPanel chartPanel = new ChartPanel(chart);
+      chartPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+      chartPanel.setBackground(Color.white);
+      frame.setContentPane(chartPanel);
+      frame.pack();
+      frame.setVisible(true);
+   }
+}
+
+Ở đây, chúng ta sử dụng DefaultCategoryDataset để lưu trữ dữ liệu và tạo biểu đồ. Phương thức updateChartData được sử dụng để cập nhật dữ liệu vào dataset và phương thức displayChart được sử dụng để hiển thị biểu đồ trên một JFrame.
+
+Ví dụ dưới đây sẽ tạo một đối tượng SensorDataBarChart và sử dụng nó để hiển thị một biểu đồ bar chart đơn giản cho dữ liệu:
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class Gateway {
+   private SensorDataLineChart lineChart;
+   private SensorDataBarChart barChart;
+   private SensorDataPieChart pieChart;
+   
+   public Gateway() {
+      lineChart = new SensorDataLineChart();
+      barChart = new SensorDataBarChart();
+      pieChart = new SensorDataPieChart();
+   }
+   
+   public void processData(String sensorId, String data) {
+      // process sensor data here
+      
+      // update line chart data
+      lineChart.updateChartData(sensorId, data);
+      
+      // update bar chart data
+      Map<String, Integer> dataMap = new HashMap<>();
+      dataMap.put(sensorId, 1);
+      barChart.updateChartData(dataMap);
+      
+      // update pie chart data
+      pieChart.updateChartData(sensorId, 1);
+   }
+   
+   public void displayCharts() {
+      lineChart.displayChart();
+      barChart.displayChart();
+      pieChart.displayChart

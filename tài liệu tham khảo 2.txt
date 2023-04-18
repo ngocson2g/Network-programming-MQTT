@@ -1,0 +1,219 @@
+#1.Gateway đóng vai trò server:
+
+import org.eclipse.paho.client.mqttv3.*;
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+
+public class SensorGateway {
+
+    // Định nghĩa các biến sử dụng trong chương trình
+    private static final String BROKER_URL = "tcp://localhost:1883";
+    private static final String CLIENT_ID = "SensorGateway";
+
+    private MqttClient client;
+
+    public SensorGateway() {
+        // Khởi tạo MQTT client và kết nối với MQTT broker
+        try {
+            client = new MqttClient(BROKER_URL, CLIENT_ID, new MemoryPersistence());
+            client.connect();
+            System.out.println("Connected to MQTT broker: " + BROKER_URL);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        SensorGateway gateway = new SensorGateway();
+    }
+
+}
+
+-----
+#2. Chương trình sinh dữ liệu cho các cảm biến để gửi đến server:
+
+import org.eclipse.paho.client.mqttv3.*;
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.json.JSONObject;
+
+public class SensorSimulator {
+
+    // Định nghĩa các biến sử dụng trong chương trình
+    private static final String BROKER_URL = "tcp://localhost:1883";
+    private static final String CLIENT_ID = "SensorSimulator";
+    private static final String SENSOR_TOPIC = "sensors/sensor1/data";
+
+    private MqttClient client;
+
+    public SensorSimulator() {
+        // Khởi tạo MQTT client và kết nối với MQTT broker
+        try {
+            client = new MqttClient(BROKER_URL, CLIENT_ID, new MemoryPersistence());
+            client.connect();
+            System.out.println("Connected to MQTT broker: " + BROKER_URL);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendSensorData() {
+        // Giả lập dữ liệu từ cảm biến và gửi đến server thông qua MQTT broker
+        JSONObject sensorData = new JSONObject();
+        sensorData.put("temperature", Math.random() * 50);
+        sensorData.put("humidity", Math.random() * 100);
+        MqttMessage message = new MqttMessage(sensorData.toString().getBytes());
+        message.setQos(2);
+        try {
+            client.publish(SENSOR_TOPIC, message);
+            System.out.println("Published message: " + message.toString());
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        SensorSimulator sensor = new SensorSimulator();
+        while (true) {
+            sensor.sendSensorData();
+            Thread.sleep(1000);
+        }
+    }
+
+}
+
+#3. Chương trình có giao diện hiển thị phía server:
+
+import org.eclipse.paho.client.mqttv3.*;
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.json.JSONObject;
+import javax.swing.*;
+import java.awt.*;
+
+public class SensorMonitor {
+
+    // Định nghĩa các biến sử dụng trong chương trình
+    private static final
+    String BROKER_URL = "tcp://localhost:1883";
+    private static final String CLIENT_ID = "SensorMonitor";
+    private static final String SENSOR_TOPIC = "sensors/sensor1/data";
+private MqttClient client;
+private JFrame frame;
+private JTextArea textArea;
+
+public SensorMonitor() {
+    // Khởi tạo MQTT client và kết nối với MQTT broker
+    try {
+        client = new MqttClient(BROKER_URL, CLIENT_ID, new MemoryPersistence());
+        client.connect();
+        System.out.println("Connected to MQTT broker: " + BROKER_URL);
+    } catch (MqttException e) {
+        e.printStackTrace();
+    }
+
+    // Khởi tạo giao diện hiển thị dữ liệu từ các cảm biến
+    frame = new JFrame("Sensor Monitor");
+    frame.setSize(400, 300);
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setLocationRelativeTo(null);
+    frame.setLayout(new BorderLayout());
+
+    textArea = new JTextArea();
+    textArea.setEditable(false);
+    JScrollPane scrollPane = new JScrollPane(textArea);
+    frame.add(scrollPane, BorderLayout.CENTER);
+
+    client.setCallback(new MqttCallback() {
+        @Override
+        public void connectionLost(Throwable throwable) {
+            System.out.println("Connection lost to MQTT broker: " + BROKER_URL);
+        }
+
+        @Override
+        public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
+            // Hiển thị dữ liệu từ các cảm biến lên giao diện
+            JSONObject sensorData = new JSONObject(new String(mqttMessage.getPayload()));
+            String displayText = String.format("Temperature: %.2f, Humidity: %.2f", sensorData.getDouble("temperature"), sensorData.getDouble("humidity"));
+            textArea.append(displayText + "\n");
+        }
+
+        @Override
+        public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
+
+        }
+    });
+
+    try {
+        client.subscribe(SENSOR_TOPIC);
+    } catch (MqttException e) {
+        e.printStackTrace();
+    }
+
+    frame.setVisible(true);
+}
+
+public static void main(String[] args) {
+    SensorMonitor monitor = new SensorMonitor();
+}
+}
+
+
+4. Chương trình cho phép các cảm biến nhận dữ liệu (ví dụ dữ liệu điều khiển từ gateway):
+
+```java
+import org.eclipse.paho.client.mqttv3.*;
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.json.JSONObject;
+
+public class SensorReceiver {
+
+    // Định nghĩa các biến sử dụng trong chương trình
+    private static final String BROKER_URL = "tcp://localhost:1883";
+    private static final String CLIENT_ID = "SensorReceiver";
+    private static final String CONTROL_TOPIC = "sensors/sensor1/control";
+
+    private MqttClient client;
+
+    public SensorReceiver() {
+        // Khởi tạo MQTT client và kết nối với MQTT broker
+        try {
+            client = new MqttClient(BROKER_URL, CLIENT_ID, new MemoryPersistence());
+            client.connect();
+            System.out.println("Connected to MQTT broker: " + BROKER_URL);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+
+        // Đăng ký để nhận dữ liệu điều khiển từ gateway
+        client.setCallback(new MqttCallback() {
+            @Override
+            public void connectionLost(Throwable throwable) {
+                System.out.println("Connection lost to MQTT broker: " + BROKER_URL);
+            }
+
+           
+        @Override
+        public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
+            // Thực hiện các hành động dựa trên dữ liệu điều khiển từ gateway
+            JSONObject controlData = new JSONObject(new String(mqttMessage.getPayload()));
+            if (controlData.getBoolean("fan_on")) {
+                System.out.println("Turn on fan");
+            } else {
+                System.out.println("Turn off fan");
+            }
+        }
+
+        @Override
+        public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
+
+        }
+    });
+
+    try {
+        client.subscribe(CONTROL_TOPIC);
+    } catch (MqttException e) {
+        e.printStackTrace();
+    }
+}
+
+public static void main(String[] args) {
+    SensorReceiver receiver = new SensorReceiver();
+}

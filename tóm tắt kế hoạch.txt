@@ -1,0 +1,90 @@
+------- Đề bài-------
+
+1. Mô tả bài toán
+Để xây dựng chương trình thực hiện giao thức MQTT cho mạng cảm biến không dây trong Java, chúng ta có thể sử dụng thư viện Eclipse Paho MQTT, đây là một thư viện được phát triển bởi Eclipse Foundation để hỗ trợ các ứng dụng IoT và các giao thức liên quan. Chương trình bao gồm các thành phần sau:
+
+Gateway đóng vai trò server:
+Chương trình sẽ tạo ra một MQTT broker để đóng vai trò là gateway và xử lý các thông điệp được gửi từ các cảm biến. Chúng ta có thể sử dụng thư viện Eclipse Paho MQTT để tạo MQTT broker và kết nối với các thiết bị khác.
+
+Chương trình sinh dữ liệu cho các cảm biến để gửi đến server:
+Chương trình sẽ giả lập dữ liệu từ các cảm biến và gửi chúng đến server thông qua giao thức MQTT. Dữ liệu sẽ được định dạng dưới dạng JSON để dễ dàng trao đổi giữa các thiết bị và ứng dụng.
+
+Chương trình có giao diện hiển thị phía server:
+Giao diện sẽ hiển thị các thông tin liên quan đến các cảm biến, bao gồm trạng thái, giá trị đo được và thời gian cập nhật. Chương trình sử dụng các thành phần của Java Swing để tạo giao diện đồ họa.
+
+Chương trình cho phép các cảm biến nhận dữ liệu:
+Chương trình cũng cho phép các cảm biến nhận dữ liệu từ gateway thông qua giao thức MQTT. Các cảm biến sẽ đăng ký với gateway và sẽ nhận được các thông điệp điều khiển từ server thông qua giao thức MQTT.
+
+Yêu cầu chính:
+
+I. Chương trình hiển thị thông tin các cảm biến thực hiện kết nối với gateway.
+
+II. Chương trình sinh dữ liệu cho các cảm biến: tự động sinh dữ liệu cảm biến và gửi dữ liệu lên gateway. Chương trình hiển thị dữ liệu nhận được phía gateway (sử dụng các biểu đồ line chart, bar chart, pie chart để hiển thị)
+
+III. Chương trình hiển thị thông tin điều khiển tại các cảm biến (được gửi từ gateway)
+
+IV. Chương trình hiển thị đánh giá số lượng tối đa các node cảm biến có thể kết nối đến gateway.
+
+V. Chương trình hiển thị đánh giá hiệu năng của giao thức: Throughput, delay, v.v. khi số lượng node cảm biến tăng lên.
+
+2. Môi trường chạy của chương trình
+
+- Hệ điều hành: Linux
+
+- Programming language: C, C++, Java
+
+3. Đánh giá
+
+- Điểm chương trình (80%)
+
++ Làm được các yêu cầu I, II, III: 50% điểm
+
++ Làm được các yêu cầu IV: 15%
+
++ Làm được các yêu cầu V: 15%
+
+- Điểm tài liệu: 15%
+
+Trình bày đầy đủ thuật toán, giao thức, thiết kế chương trình
+
+Cần ghi lại log quá trình làm việc của nhóm và vai trò của các thành viên
+
+trong nhóm
+
+Yêu cầu sử dụng github.com để cập nhật code chương trình
+
+- Điểm giao diện: 5%
+
+Giao diện thân thiện, dễ dùng
+
+4. Hạn nộp bài tập lớn: 04/05/2023. Báo cáo: sau 01 tuần
+
+Chú ý:
+
+- Một nhóm có 3-4 sinh viên. Điểm thực hành trung bình của các thành viên không chênh nhau quá 3 điểm.
+
+- Điểm của các thành viên trong nhóm có thể khác nhau tùy theo mức độ đóng góp của mỗi thành viên
+
+------- tài liệu -------------
+
+tài liệu về chương trình (code) - làm sau
+tài liệu cần chuẩn bị:
+	- thư viện Eclipse Paho MQTT
+	- thư viện đồ họa như JFreeChart và JavaFX Charts (biểu đồ line chart, bar chart, pie chart)
+      - thư viện Tkinter (đồ họa)
+hoàn thiện mô tả dự án trong README trên github
+
+-------- code ---------
+
+hàm SersorGateway đóng vai trò server (gateway) - pub
+hàm SensorSimulator đóng vai trò sinh dữ liệu cho các cảm biến để gửi đến server
+hàm SensorMonitor đóng vai trò khởi tạo giao diện hiện thị dữ liệu từ các cảm biến
+hàm SersorReceiver đóng vai trò cảm biến để nhận dữ liệu - sub
+
+------- deadline -----
+trước 21h00 20/04 đọc tóm tắt kế hoạch và được thêm hết vào github
+trước 22h00 20/04 phân chia công việc
+trước 23h59 23/04 hoàn thiện >=50% tài liệu cơ bản
+trước 23h59 30/04 hoàn thiện khối lượng công việc
+trước 23h59 03/05 hoàn thiện kiểm thử
+...

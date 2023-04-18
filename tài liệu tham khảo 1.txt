@@ -1,0 +1,52 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.Scanner;
+
+public class Pub {
+    public static void main(String[] args) throws Exception {
+        Scanner sc = new Scanner(System.in);
+
+        // Kết nối tới broker MQTT
+        Socket socket = new Socket("localhost", 1883);
+
+        // Tạo luồng ghi
+        PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
+
+        // Lặp vô hạn để nhập và gửi dữ liệu
+        while (true) {
+            System.out.print("Enter data: ");
+            String data = sc.nextLine();
+
+            // Gửi dữ liệu đến chủ đề "my/topic"
+            pw.println("PUBLISH my/topic " + data);
+        }
+    }
+}
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.Socket;
+
+public class Sub {
+    public static void main(String[] args) throws Exception {
+        // Kết nối tới broker MQTT
+        Socket socket = new Socket("localhost", 1883);
+
+        // Tạo luồng đọc
+        BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+        // Đăng ký nhận dữ liệu từ chủ đề "my/topic"
+        PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
+        pw.println("SUBSCRIBE my/topic");
+
+        // Lặp vô hạn để đọc và in ra dữ liệu
+        while (true) {
+            String data = br.readLine();
+            System.out.println(data);
+        }
+    }
