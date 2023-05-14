@@ -66,25 +66,68 @@ Chú ý:
 - Điểm của các thành viên trong nhóm có thể khác nhau tùy theo mức độ đóng góp của mỗi thành viên
 
 ------- tài liệu -------------
-
 tài liệu về chương trình (code) - làm sau
 tài liệu cần chuẩn bị:
-	- thư viện Eclipse Paho MQTT
+	- thư viện Eclipse Paho MQTT.
 	- thư viện đồ họa như JFreeChart và JavaFX Charts (biểu đồ line chart, bar chart, pie chart)
-      - thư viện Tkinter (đồ họa)
+	- giao thức MQTT (https://www.javatpoint.com/mqtt-protocol)
 hoàn thiện mô tả dự án trong README trên github
+tài liệu tham khảo:
+	- https://github.com/eclipse/paho.mqtt.c
+	- tài liệu tham khảo gihub (https://github.com/ngocson2g/Network-programming-MQTT).
 
 -------- code ---------
 
 hàm SersorGateway đóng vai trò server (gateway) - pub
-hàm SensorSimulator đóng vai trò sinh dữ liệu cho các cảm biến để gửi đến server
-hàm SensorMonitor đóng vai trò khởi tạo giao diện hiện thị dữ liệu từ các cảm biến
 hàm SersorReceiver đóng vai trò cảm biến để nhận dữ liệu - sub
+
+hàm SensorSimulator đóng vai trò sinh dữ liệu cho các cảm biến để gửi đến server
+hàm SensorMonitor đóng vai trò khởi tạo giao diện hiển thị thông tin điều khiển tại các cảm biến
+hàm đồ họa gateway
 
 ------- deadline -----
 trước 21h00 20/04 đọc tóm tắt kế hoạch và được thêm hết vào github
 trước 22h00 20/04 phân chia công việc
-trước 23h59 23/04 hoàn thiện >=50% tài liệu cơ bản
+trước 20h59 23/04 hoàn thiện >=50% tài liệu cơ bản
 trước 23h59 30/04 hoàn thiện khối lượng công việc
 trước 23h59 03/05 hoàn thiện kiểm thử
 ...
+
+
+
+- giao diện gateway: + mqtt sv + line chart + đồ họa
+- giao diện cảm biến: + mqtt cl + hàm tự động sinh dữ liệu + đồ họa 
+
+1 người doc. 4 người code. 
+
+
+------ code 
+chat mqtt pub + sub - Chính.
+line chart - M Quân.
+tự động sinh dữ liệu - Sơn.
+đánh giá hiệu năng - A Quân.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
