@@ -69,7 +69,7 @@ Chú ý:
 tài liệu về chương trình (code) - làm sau
 tài liệu cần chuẩn bị:
 	- thư viện Eclipse Paho MQTT.
-	- thư viện đồ họa như JFreeChart và JavaFX Charts (biểu đồ line chart, bar chart, pie chart)
+	- thư viện  (biểu đồ line chart, bar chart, pie chart)
 	- giao thức MQTT (https://www.javatpoint.com/mqtt-protocol)
 hoàn thiện mô tả dự án trong README trên github
 tài liệu tham khảo:
