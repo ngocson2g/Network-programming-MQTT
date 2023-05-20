@@ -49,7 +49,6 @@ Gnuplot gp;
     double y_ = yy + 0.0;
     x.push_back(x_);
     y.push_back(y_);
-   cout << x_ << " " << y_ << endl;
     x_ += 1.0;
   // Vẽ sơ đồ line chart
   gp << "plot '-' with lines title 'Data'\n";
