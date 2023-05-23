@@ -30,5 +30,29 @@ Dưới đây là tóm tắt sơ qua quá trình cài đặt:
 * Cài đặt thư viện gnuplot-iostream bằng terminal
 * Clone project về máy
 * Biên dịch các file 
++ Với File Gateway:
+```bash
+g++ -o Gateway Gateway.cpp -pthread
+```
++ Với File Node:
+ ```bash
+g++ -o Node Node.cpp -pthread
+```
++ Với File Linechar
+ ```bash
+g++ -o LineChar LineChar.cpp -lboost_iostreams -pthread
+```
 * Chạy file đã biên dịch theo thứ tự Gateway -> Node -> Linechar
-* Có thể thêm nhiều Node cũng như nhiều Linechar, nhưng chỉ có một Gateway!
++ Cách chạy file đầu tiên: Dùng lệnh trong command line:
+ ```bash
+./Gateway 
+```
+ ```bash
+./Node
+```
+ ```bash
+./Linechar
+```
++ Cách chạy file thứ 2: Double click vào phần biên dịch đã được in ra (Xem chi tiết ở trong Docs)
+
+* Có thể tồn tại nhiều Node cũng như nhiều Linechar, nhưng chỉ có một Gateway!
