@@ -27,33 +27,35 @@ Gnuplot gp;
     
     
     // Đặt tiêu đề cho trục x và y
-  //gp << "set xlabel 'X'\n";
-  //gp << "set ylabel 'Y'\n";
+  gp << "set title 'Nhiet do' \n";
+  gp << "set xlabel 'h'\n";
+  gp << "set ylabel 'C'\n";
     while (1) {
         memset(message, 0, sizeof(message));
         int bytes_received = recv(client_socket, message, sizeof(message), 0);
         if (bytes_received > 0) {
+        
+        cout << message << endl;    
             
-            
-            
-// Dữ liệu điểm trên đồ thị
-    int yy = stoi(message);
-    /*
-    for (char c : message) {
-    	if (c >= '0' && c <= '9') {
-    		yy*= 10;
-    		yy += (int)c;
-    	}
-    }*/
-    
-    double y_ = yy + 0.0;
-    x.push_back(x_);
-    y.push_back(y_);
-    x_ += 1.0;
-  // Vẽ sơ đồ line chart
-  gp << "plot '-' with lines title 'Data'\n";
-  gp.send1d(boost::make_tuple(x, y));
-    
+        if (strcmp(message, "auto") == 0) {
+        int i = 0;
+		while (i < 40) {       
+  			i++;
+  			recv(client_socket, message, sizeof(message), 0);
+		   // Dữ liệu điểm trên đồ thị
+		    int yy = stoi(message);
+		    
+		    
+		    
+		    double y_ = yy + 0.0;
+		    x.push_back(x_);
+		    y.push_back(y_);
+		    x_ += 1.0;
+		  // Vẽ sơ đồ line chart
+		  gp << "plot '-' with lines title 'Data'\n";
+		  gp.send1d(boost::make_tuple(x, y));
+		}
+	}	    
     
         } else if (bytes_received == 0) {
             cout << "Server disconnected." << endl;
@@ -117,7 +119,9 @@ int main() {
     }
 
     // Send chat messages to the server
-    while(1){}
+    while(1){
+    	
+    }
 // Dừng chương trình để xem kết quả
   cout << "Press enter to exit." << endl;
   cin.get();

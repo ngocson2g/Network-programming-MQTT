@@ -9,19 +9,27 @@
 #include <pthread.h>
 #include <algorithm>
 
+//#include <gnuplot-iostream.h>
+
 #define MESSAGE_LENGTH 1024
 
 using namespace std;
+
+
 
 struct ClientInfo {
     int id;
     int socket;
     string topic;
+    //bool status = false;
 };
-
+    
+    bool check_out = false;
     vector<ClientInfo> clients;
     map<string, vector<int>> topicSubscribers;
     pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+    
+    
 
 void broadcast_message(const string& message, const string& topic, int sender_id) {
     pthread_mutex_lock(&mutex);
@@ -30,6 +38,20 @@ void broadcast_message(const string& message, const string& topic, int sender_id
     vector<int> subscribers = topicSubscribers[topic];
     for (int subscriber : subscribers) {
         if (subscriber != sender_id) {
+            send(clients[subscriber].socket, message.c_str(), message.length(), 0);
+        }
+    }
+
+    pthread_mutex_unlock(&mutex);
+}
+
+void broadcast_message_f(const string& message, const string& topic, int sender_id) {
+    pthread_mutex_lock(&mutex);
+
+    // Iterate through the subscribers of the topic and send the message to each subscriber
+    vector<int> subscribers = topicSubscribers[topic];
+    for (int subscriber : subscribers) {
+        if (subscriber == sender_id) {
             send(clients[subscriber].socket, message.c_str(), message.length(), 0);
         }
     }
@@ -46,15 +68,33 @@ void *handle_client(void *arg) {
         memset(buffer, 0, sizeof(buffer));
         int recv_size = recv(client.socket, buffer, MESSAGE_LENGTH, 0);
         if (recv_size > 0) {
-            // std::string message = "Room " + std::to_string(client.id) + ": " + buffer;
-            string message =  buffer;
-            // std::cout << "Received message: " << message << std::endl;
-
+            string message = buffer;
+            cout << "Node " << client.id << " Received message: " << message << std::endl;  //
+	     if (message == "exit") {
+	     	check_out = true;
+	     	
+	     	break;
+	     }else if (message == "quit") {
+	     	recv_size = 0;
+	     	string message = "Client " + to_string(client.id) + " disconnected.";
+            	cout << message << endl;
+		broadcast_message(message, client.topic, client_index);
+            // Remove the client from clients of the topic
+            	clients.erase(clients.begin() + client_index);
+	     	continue;
+	     }else if (message == "maxium") {
+	     	message = "maxium node: " + to_string(clients.size());
+	     	broadcast_message_f(message, client.topic, client_index);
+	     	continue;
+	     }
+	     
             // Broadcast the message to subscribers of the client's topic
             broadcast_message(message, client.topic, client_index);
-        } else if (recv_size == 0) {
-            cout << "Client " << client.id << " disconnected." << endl;
-
+        }else
+        if (recv_size == 0) {
+        	string message = "Client " + to_string(client.id) + " disconnected.";
+            cout << message << endl;
+		broadcast_message(message, client.topic, client_index);
             // Remove the client from subscribers of the topic
             if (!client.topic.empty()) {
                 pthread_mutex_lock(&mutex);
@@ -121,7 +161,7 @@ int main() {
     cout << "Server started. Waiting for connections..." << endl;
 
     int client_index = 0;
-    while ((new_socket = accept(server_socket, (struct sockaddr *)&client, (socklen_t *)&client)) != -1) {
+    while (!check_out && (new_socket = accept(server_socket, (struct sockaddr *)&client, (socklen_t *)&client)) != -1 ) {
         
 
         // Receive client ID and topic
@@ -138,7 +178,8 @@ int main() {
         new_client.id = client_id;
         new_client.socket = new_socket;
         new_client.topic = topic;
-
+	//new_client.status = true;
+	
         // Add the new client to the clients vector
         pthread_mutex_lock(&mutex);
         clients.push_back(new_client);
@@ -149,6 +190,8 @@ int main() {
             pthread_mutex_lock(&mutex);
             topicSubscribers[topic].push_back(client_index);
             pthread_mutex_unlock(&mutex);
+            
+            
         }
 
         // Create a new thread to handle the client
@@ -162,9 +205,11 @@ int main() {
         }
 
         client_index++;
+        
+        
     }
 
-    if (new_socket == -1) {
+    if (new_socket == -1 && !check_out) {
         perror("Accept failed");
         return 1;
     }

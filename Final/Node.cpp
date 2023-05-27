@@ -31,7 +31,7 @@ void *receive_messages(void *arg) {
         memset(message, 0, sizeof(message));
         int bytes_received = recv(client_socket, message, sizeof(message), 0);
         if (bytes_received > 0) {
-            //std::cout << "Received message: " << message << std::endl;
+            cout << "Received message: " << message << endl; //
         } else if (bytes_received == 0) {
             cout << "Server disconnected." << endl;
             break;
@@ -93,30 +93,37 @@ int main() {
     }
 
     // Send chat messages to the server
-    int i = 1;
-    while (i < 1000) {
-    	i++;
-    	 int random_number = create_data();
-        string message = to_string(random_number);
-         cout << "Enter :" << random_number << endl;
-        send(client_socket, message.c_str(), message.length(), 0);
-       
-        this_thread::sleep_for(chrono::seconds(5));
+    
+    while (1) {
     	
         
-        //std::cin.getline(message, sizeof(message));
+        cout << "Enter commander (auto -- maxium, quit): ";
+        cin.getline(message, sizeof(message));
 
-	/*
         // Check if user wants to quit
-        if (strcmp(message, "quit") == 0) {
+        
+        if (strcmp(message, "auto") == 0){
+        	int i = 0;
+        	send(client_socket, message, strlen(message), 0);
+        	while (i < 40){
+			i++;
+	    	 	int random_number = create_data();
+			string message = to_string(random_number);
+		 	cout << "Enter :" << random_number << endl;
+			send(client_socket, message.c_str(), message.length(), 0);
+			this_thread::sleep_for(chrono::seconds(5));
+        	}
+        }
+        
+        if (strcmp(message, "quit") == 0 || strcmp(message, "exit") == 0) {
             // Send termination signal to the server
             send(client_socket, message, strlen(message), 0);
             break;
         }
 
         // Send chat message to server
-        //send(client_socket, message, strlen(message), 0);
-        */
+        send(client_socket, message, strlen(message), 0);
+        
     }
 
     // Close the client socket
