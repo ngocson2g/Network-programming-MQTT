@@ -56,3 +56,6 @@ g++ -o LineChar LineChar.cpp -lboost_iostreams -pthread
 + Cách chạy file thứ 2: Double click vào phần biên dịch đã được in ra (Xem chi tiết ở trong Docs)
 
 * Có thể tồn tại nhiều Node cũng như nhiều Linechar, nhưng chỉ có một Gateway!
+
+
+#Link docs: https://docs.google.com/document/d/13sal2k7Ibef-_heVnot6HWuRNHxEHxeedhPi1IkR1d4/edit#
