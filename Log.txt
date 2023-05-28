@@ -1,0 +1,50 @@
+20/3: Bắt đầu họp dự án, chia công việc
+
+Sơn: Thiết kế gateway, hàm tự động sinh dữ liệu
+Linh: làm docs, chuẩn bị tài liệu cần có, check môi trường, các package cần thiết.
+Minh Quân: Giao diện hiển thị dữ liệu.
+Chính: kiểm thử, hỗ trợ làm docs.
+Anh Quân: làm cảm biến nhận dữ liệu.
+
+26/3: Họp và thảo luận lần 1.
+Chốt sử dụng Java và thư viện Paho, Gnutot.
+Bắt đầu nghiên cứu và thực hiện bài tập lớn
+
+1/4: Họp và thảo luận lần 2.
+Gateway, Node, Line chart gần được hoàn thiện. 
+Bổ sung thêm docs
+
+7/4: Họp và thảo luận lần 3.
+Bắt đầu link Gateway, Node, Line chart.
+Gặp khó khăn khi link dự án, không tìm thấy broker/gateway.
+=> Thay đổi phương án khác.
+
+9/4: Họp và thảo luận lần 4.
+Nhóm Docs ( Linh và Chính ) tìm hiểu sâu hơn, quyết định sử dụng ngôn ngữ C++ không dùng tới Paho.
+
+16/4: Họp và thảo luận lần 5.
+Nhóm Docs và Nhóm Code trao đổi, gặp một số khó khăn khi sử dụng các hàm do bên docs chuẩn bị sẵn.
+
+
+23/4: Họp và thảo luận lần 6.
+Các thành phần cơ bản SersorGateway, SensorSimulator, SensorMonitor, SersorReceiver được hoàn thành.
+Chuẩn bị cho yêu cầu IV.
+
+30/4: Họp và thảo luận lần 7.
+Bắt đầu làm báo cáo. Nhóm docs chú thích/ góp ý cho tối ưu vào code.
+
+5/5: Họp và thảo luận lần 8.
+Yêu cầu IV được thực hiện thủ công ( Chạy Node/Client cho tới khi một Client bị disconnect )
+=> Chưa tối ưu và cần tìm hiểu thêm.
+Tìm hiểu về làm giao diện với C++.
+Tìm hiểu về yêu cầu V
+
+12/5: Họp và thảo luận lần 9.
+Không tìm thấy tài liệu về yêu cầu V, cả nhóm quyết định drop và tìm hiểu về giao diện với C++
+
+19/5: Họp và thảo luận lần 10.
+Hoàn thành yêu cầu I, II, III, IV.
+Giao diện với C++ gặp trục trặc.
+
+25/5: Thêm 3 lựa chọn auto, maxium và quit cho Node.
+Giới hạn số lần sinh dữ liệu với mỗi lần nhận lệnh "auto" của Node.
